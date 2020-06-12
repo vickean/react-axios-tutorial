@@ -46,7 +46,7 @@ export default function CreateUser(props) {
   };
 
   const locateAddress = () => {
-    const encodedAddress = encodeURI(state.address.trim());
+    const encodedAddress = encodeURIComponent(state.address.trim());
     console.log(encodedAddress);
 
     axios
@@ -131,6 +131,7 @@ export default function CreateUser(props) {
           className="form-control"
           rows="3"
           value={state.formatedAddress}
+          readOnly
         />
       </div>
 
