@@ -45,6 +45,29 @@ export default function CreateUser(props) {
     });
   };
 
+  const locateAddress = () => {
+    const encodedAddress = encodeURI(state.address.trim());
+    console.log(encodedAddress);
+
+    axios
+      .get(`http://localhost:4000/users/geolocate?address=${encodedAddress}`)
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: "all",
+          payload: {
+            ...state,
+            formatedAddress: res.data.results[0].formatted_address,
+            lat: res.data.results[0].geometry.location.lat,
+            lng: res.data.results[0].geometry.location.lng,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -67,53 +90,55 @@ export default function CreateUser(props) {
 
   return (
     <div className="wrapper">
-      <form>
-        <div className="form-group">
-          <label>Enter Name</label>
+      <div className="form-group">
+        <label>Enter Name</label>
+        <input
+          type="text"
+          className="form-control"
+          value={state.name}
+          onChange={updateName}
+        />
+      </div>
+      <div className="form-group">
+        <label>Enter Email</label>
+        <input
+          type="text"
+          className="form-control"
+          value={state.email}
+          onChange={updateEmail}
+        />
+      </div>
+      <div className="form-group">
+        <label>Enter Address</label>
+        <div className="input-group">
           <input
             type="text"
             className="form-control"
-            value={state.name}
-            onChange={updateName}
+            value={state.address}
+            onChange={updateAddress}
           />
-        </div>
-        <div className="form-group">
-          <label>Enter Email</label>
-          <input
-            type="text"
-            className="form-control"
-            value={state.email}
-            onChange={updateEmail}
-          />
-        </div>
-        <div className="form-group">
-          <label>Enter Address</label>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              value={state.address}
-              onChange={updateAddress}
-            />
-            <div classname="input-group-append">
-              <button
-                className="btn btn-info"
-                onClick={() => console.table(state)}
-              >
-                Locate
-              </button>
-            </div>
+          <div className="input-group-append">
+            <button className="btn btn-info" onClick={locateAddress}>
+              Locate
+            </button>
           </div>
         </div>
-        <div className="form-group">
-          <input
-            type="submit"
-            value="Create User"
-            className="btn btn-success btn-block"
-            onClick={handleSubmit}
-          />
-        </div>
-      </form>
+      </div>
+
+      <div className="form-group">
+        <label>Formatted Address</label>
+        <textarea
+          className="form-control"
+          rows="3"
+          value={state.formatedAddress}
+        />
+      </div>
+
+      <div className="form-group">
+        <button className="btn btn-success btn-block" onClick={handleSubmit}>
+          Create User
+        </button>
+      </div>
       <button
         className="btn btn-info btn-block"
         onClick={() => console.table(state)}

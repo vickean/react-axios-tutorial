@@ -7,6 +7,7 @@ const user = require("../models/user-schema");
 
 router.get("/hello", (req, res) => {
   console.log("Says hi!");
+  // console.log(process.env.GEOLOCATION_API_KEY);
   return res.json({ potato: "Says hi!" });
 });
 
@@ -41,31 +42,25 @@ router.get("/edit/:id", (req, res) => {
   });
 });
 
-router.get("/geolocate/:address", (req, res, next) => {
-  const address = req.params.address;
+router.get("/geolocate", (req, res, next) => {
+  const address = req.query.address;
 
   console.log(address);
-  return res.json({ address });
-  // axios({
-  //   "method":"GET",
-  //   "url":"https://google-maps-geocoding.p.rapidapi.com/geocode/json",
-  //   "headers":{
-  //   "content-type":"application/octet-stream",
-  //   "x-rapidapi-host":"google-maps-geocoding.p.rapidapi.com",
-  //   "x-rapidapi-key":"8811b8e6d7msha5966a34116dcb1p19e602jsnc6fe93f0be18",
-  //   "useQueryString":true
-  //   },"params":{
-  //   "language":"en",
-  //   "address":"8%2C Jalan 10%2F10D%2C 46000 Petaling Jaya"
-  //   }
-  //   })
-  //   .then((response)=>{
-  //     console.log(response)
-  //   })
-  //   .catch((error)=>{
-  //     console.log(error)
-  //     return next(error)
-  //   })
+
+  axios
+    .get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${process.env.GEOLOCATION_API_KEY}`
+    )
+    .then((response) => {
+      console.log("Success!");
+      res.json(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+      return next(error);
+    });
 });
 
 module.exports = router;

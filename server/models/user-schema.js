@@ -9,6 +9,12 @@ let userSchema = new Schema(
     email: {
       type: String,
     },
+    address: {
+      type: String,
+    },
+    formattedAddress: {
+      type: String,
+    },
   },
   {
     collection: "users",
