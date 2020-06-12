@@ -5,6 +5,10 @@ export default function CreateUser(props) {
   const initialState = {
     name: "",
     email: "",
+    address: "",
+    formatedAddress: "",
+    lat: 0.0,
+    lng: 0.0,
   };
 
   const reducer = (state, action) => {
@@ -34,6 +38,13 @@ export default function CreateUser(props) {
     });
   };
 
+  const updateAddress = (e) => {
+    dispatch({
+      type: "address",
+      payload: e.target.value,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -56,7 +67,7 @@ export default function CreateUser(props) {
 
   return (
     <div className="wrapper">
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="form-group">
           <label>Enter Name</label>
           <input
@@ -76,16 +87,36 @@ export default function CreateUser(props) {
           />
         </div>
         <div className="form-group">
+          <label>Enter Address</label>
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              value={state.address}
+              onChange={updateAddress}
+            />
+            <div classname="input-group-append">
+              <button
+                className="btn btn-info"
+                onClick={() => console.table(state)}
+              >
+                Locate
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="form-group">
           <input
             type="submit"
             value="Create User"
             className="btn btn-success btn-block"
+            onClick={handleSubmit}
           />
         </div>
       </form>
       <button
         className="btn btn-info btn-block"
-        onClick={() => console.log(state)}
+        onClick={() => console.table(state)}
       >
         Print State
       </button>
