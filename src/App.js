@@ -9,8 +9,16 @@ function App() {
     <Router>
       <div className="App">
         <header>
-          <nav classname="navbar navbar-expand-lg navbar-dark bg-primary">
-            <a className="navbar-brand">React Axios Tutorial</a>
+          <nav className="navbar navbar-expand-md navbar-dark bg-primary">
+            <a
+              className="navbar-brand"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              href="#"
+            >
+              React Axios Tutorial
+            </a>
 
             <div
               className="collapse navbar-collapse"
@@ -31,6 +39,8 @@ function App() {
             </div>
           </nav>
         </header>
+
+        <div style={{ height: "30px" }} />
 
         <div className="container">
           <div className="row">
