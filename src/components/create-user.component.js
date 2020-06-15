@@ -1,7 +1,8 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import axios from "axios";
+import { Map, GoogleApiWrapper, Marker } from "google-maps-react";
 
-export default function CreateUser(props) {
+export function CreateUser(props) {
   const initialState = {
     name: "",
     email: "",
@@ -88,6 +89,10 @@ export default function CreateUser(props) {
     dispatch({ type: "reset", payload: "" });
   };
 
+  useEffect(() => {
+    console.log(process.env.REACT_APP_MAPS_JS_API_KEY);
+  }, []);
+
   return (
     <div className="wrapper">
       <div className="form-group">
@@ -135,6 +140,23 @@ export default function CreateUser(props) {
         />
       </div>
 
+      {state.formatedAddress !== "" ? (
+        <Map
+          style={{ height: "100%", width: "100%" }}
+          google={props.google}
+          zoom={14}
+          initialCenter={{ lat: state.lat, lng: state.lng }}
+          containerStyle={{
+            margin: "1rem auto",
+            width: "100%",
+            height: "50vh",
+            position: "relative",
+          }}
+        >
+          <Marker position={{ lat: state.lat, lng: state.lng }} />
+        </Map>
+      ) : null}
+
       <div className="form-group">
         <button className="btn btn-success btn-block" onClick={handleSubmit}>
           Create User
@@ -149,3 +171,8 @@ export default function CreateUser(props) {
     </div>
   );
 }
+
+export default GoogleApiWrapper({
+  apiKey: process.env.REACT_APP_MAPS_JS_API_KEY,
+  // apiKey: undefined,
+})(CreateUser);
